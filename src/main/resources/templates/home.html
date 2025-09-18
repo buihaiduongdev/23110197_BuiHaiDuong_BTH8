@@ -13,12 +13,12 @@
         <p>Welcome, <span th:text="${session.currentUser.fullName}">User</span>!</p>
 
         <!-- Admin menu -->
-        <div th:if="${session.currentUser.role.name() == 'ADMIN'}">
+        <div th:if="${session.currentUser.role.name() == 'admin'}">
             <a th:href="@{/categories}">Manage Categories</a>
         </div>
 
         <!-- Manager/User -->
-        <div th:if="${session.currentUser.role.name() != 'ADMIN'}">
+        <div th:if="${session.currentUser.role.name() != 'admin'}">
             <a th:href="@{/categories}">View Categories</a>
         </div>
     </div>

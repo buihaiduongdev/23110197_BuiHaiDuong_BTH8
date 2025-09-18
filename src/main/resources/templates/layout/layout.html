@@ -3,16 +3,17 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title th:replace="~{::title}">My App</title>
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">My App</title>
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 </head>
 <body>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <main layout:fragment="content">
+        <p>Page content goes here</p>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
     <script th:src="@{/js/bootstrap.js}"></script>
 </body>

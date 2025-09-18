@@ -34,18 +34,4 @@ public class SecurityConfig {
 		return authProvider;
 	}
 
-//	@Bean
-//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//		http.authorizeHttpRequests(auth -> auth
-//				.requestMatchers(antMatcher("/"), antMatcher("/login"), antMatcher("/logout"), antMatcher("/home"),
-//						antMatcher("/css/**"), antMatcher("/js/**"), antMatcher("/images/**"),
-//						antMatcher("/webjars/**"), antMatcher("/h2-console/**"))
-//				.permitAll().requestMatchers(antMatcher("/category/**")).authenticated().anyRequest().authenticated())
-//				.formLogin(formLogin -> formLogin.loginPage("/login").loginProcessingUrl("/login")
-//						.defaultSuccessUrl("/home", true).failureUrl("/login?error=true"))
-//				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"))
-//				.csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher("/h2-console/**")))
-//				.headers(headers -> headers.frameOptions().sameOrigin());
-//		return http.build();
-//	}
 }

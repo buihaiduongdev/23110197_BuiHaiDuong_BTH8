@@ -1,5 +1,7 @@
 package com.example.bth07.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,8 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -48,6 +48,6 @@ public class User {
 	private Set<Category> categories;
 
 	public enum Role {
-		ADMIN, MANAGER, USER
+		admin, manager, user
 	}
 }
