@@ -14,12 +14,12 @@
 
         <!-- Admin menu -->
         <div th:if="${session.currentUser.role.name() == 'admin'}">
-            <a th:href="@{/categories}">Manage Categories</a>
+            <a th:href="@{/category}">Manage Categories</a>
         </div>
 
         <!-- Manager/User -->
         <div th:if="${session.currentUser.role.name() != 'admin'}">
-            <a th:href="@{/categories}">View Categories</a>
+            <a th:href="@{/category}">View Categories</a>
         </div>
     </div>
 </div>

@@ -6,26 +6,37 @@
     <title th:text="#{login.title}">Login</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <h2 th:text="#{login.title}">Login</h2>
-
-    <form th:action="@{/login}" method="post">
-        <div>
-            <label th:text="#{login.username}">Username:</label>
-            <input type="text" name="username" required />
+<div layout:fragment="content" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center" th:text="#{login.title}">Login</h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label" th:text="#{login.username}">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label" th:text="#{login.password}">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" th:text="#{login.button}">Login</button>
+                        </div>
+                    </form>
+                    <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+                        <p th:text="${error}"></p>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="?lang=en">English</a> | <a href="?lang=vi">Tiếng Việt</a>
+                </div>
+            </div>
         </div>
-        <div>
-            <label th:text="#{login.password}">Password:</label>
-            <input type="password" name="password" required />
-        </div>
-        <div>
-            <button type="submit" th:text="#{login.button}">Login</button>
-        </div>
-    </form>
-
-    <p th:if="${error}" th:text="#{${error}}">Invalid login</p>
-
-    <a href="?lang=en">English</a> | <a href="?lang=vi">Tiếng Việt</a>
+    </div>
 </div>
 </body>
 </html>
