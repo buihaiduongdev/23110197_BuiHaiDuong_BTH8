@@ -39,10 +39,10 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/login", "/logout", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**")
+				.requestMatchers("/", "/login", "/logout", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**")
 				.permitAll().requestMatchers("/category/**").authenticated().anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.loginPage("/login").loginProcessingUrl("/login")
-						.defaultSuccessUrl("/home", true).failureUrl("/auth/login?error=true"))
+						.defaultSuccessUrl("/home", true).failureUrl("/login?error=true"))
 				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
 		return http.build();
 	}
