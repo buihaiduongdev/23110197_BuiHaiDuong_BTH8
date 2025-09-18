@@ -1,5 +1,6 @@
 package com.example.bth07.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,5 +15,13 @@ public class HomeController {
     @GetMapping("/home")
     public String index() {
         return "home";
+    }
+
+    @GetMapping("/auth/login")
+    public String login(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/home";
+        }
+        return "login";
     }
 }
