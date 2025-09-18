@@ -7,12 +7,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -38,6 +41,9 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
+	@OneToMany(mappedBy = "createdBy")
+	private Set<Category> categories;
 
 	public enum Role {
 		ADMIN, MANAGER, USER
