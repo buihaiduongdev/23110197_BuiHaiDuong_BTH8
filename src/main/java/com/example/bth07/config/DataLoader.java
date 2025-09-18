@@ -1,7 +1,6 @@
 package com.example.bth07.config;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.bth07.entity.Category;
@@ -15,26 +14,24 @@ public class DataLoader implements CommandLineRunner {
 
 	private final UserRepository userRepo;
 	private final CategoryRepository categoryRepo;
-	private final PasswordEncoder passwordEncoder;
 
-	public DataLoader(UserRepository userRepo, CategoryRepository categoryRepo, PasswordEncoder passwordEncoder) {
+	public DataLoader(UserRepository userRepo, CategoryRepository categoryRepo) {
 		this.userRepo = userRepo;
 		this.categoryRepo = categoryRepo;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		// Insert Users nếu chưa có
 		if (userRepo.count() == 0) {
-			User admin = User.builder().username("admin").password(passwordEncoder.encode("123456"))
+			User admin = User.builder().username("admin").password("123456")
 					.fullName("Nguyen Van Admin").email("admin@mail.com").phone("0123456789").role(Role.admin).build();
 
-			User manager = User.builder().username("manager").password(passwordEncoder.encode("123456"))
+			User manager = User.builder().username("manager").password("123456")
 					.fullName("Nguyen Van Manager").email("manager@mail.com").phone("0987654321").role(Role.manager)
 					.build();
 
-			User user = User.builder().username("user").password(passwordEncoder.encode("123456"))
+			User user = User.builder().username("user").password("123456")
 					.fullName("Nguyen Van User").email("user@mail.com").phone("0111222333").role(Role.user).build();
 
 			userRepo.save(admin);

@@ -1,7 +1,6 @@
 package com.example.bth07.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,6 @@ public class LoginController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	@GetMapping("/login")
 	public String showLoginForm(HttpSession session) {
 		if (session.getAttribute("currentUser") != null) {
@@ -36,7 +32,7 @@ public class LoginController {
 
 		User user = userRepository.findByUsername(username);
 
-		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+		if (user != null && password.equals(user.getPassword())) {
 			session.setAttribute("currentUser", user);
 			
 			return "redirect:/home";

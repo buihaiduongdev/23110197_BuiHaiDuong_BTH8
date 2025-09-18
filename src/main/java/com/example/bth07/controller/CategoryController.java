@@ -1,11 +1,10 @@
 package com.example.bth07.controller;
 
 import com.example.bth07.entity.Category;
+import com.example.bth07.entity.User;
 import com.example.bth07.service.CategoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +16,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     private boolean isUserAuthorized(HttpSession session) {
-        UserDetails userDetails = (UserDetails) session.getAttribute("currentUser");
-        return userDetails != null;
+        User currentUser = (User) session.getAttribute("currentUser");
+        return currentUser != null;
     }
 
     private void addUserRolesToModel(HttpSession session, Model model) {
-        UserDetails userDetails = (UserDetails) session.getAttribute("currentUser");
-        if (userDetails != null) {
-            boolean isAdminOrManager = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(role -> role.equals("admin") || role.equals("manager"));
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            boolean isAdminOrManager = currentUser.getRole() == User.Role.admin || currentUser.getRole() == User.Role.manager;
             model.addAttribute("isAdminOrManager", isAdminOrManager);
         }
     }
