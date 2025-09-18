@@ -39,19 +39,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/logout", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/login", "/logout", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/category/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login")
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
-                        .failureUrl("/auth/login?error=true")
+                        .failureUrl("/login?error=true")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/auth/login")
+                        .logoutSuccessUrl("/login")
                 );
         return http.build();
     }
