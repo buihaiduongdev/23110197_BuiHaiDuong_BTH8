@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
       layout:decorate="~{layout/layout}">
 <head>
     <title th:text="#{category.list.title}">Category List</title>
@@ -14,24 +14,20 @@
         <a th:href="@{/category/add}" class="btn btn-primary" th:text="#{category.add.button}">Add Category</a>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
         <tr>
-            <th th:text="#{category.name}">Name</th>
-            <th th:text="#{category.description}">Description</th>
-            <th th:text="#{category.createdBy}">Created By</th>
-            <th th:text="#{category.actions}" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">Actions</th>
+            <th th:text="#{category.name.label}">Name</th>
+            <th sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:text="#{actions.label}">Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="category : ${categories}">
             <td th:text="${category.name}"></td>
-            <td th:text="${category.description}"></td>
-            <td th:text="${category.createdBy != null} ? ${category.createdBy.username} : ''"></td>
             <td sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
-                <a th:href="@{/category/edit/{id}(id=${category.id})}" class="btn btn-sm btn-info" th:text="#{action.edit}">Edit</a>
-                <a th:href="@{/category/delete/{id}(id=${category.id})}" class="btn btn-sm btn-danger" th:text="#{action.delete}" sec:authorize="hasAuthority('ADMIN')"
-                   onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                <a th:href="@{/category/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm" th:text="#{edit.button}">Edit</a>
+                <a th:href="@{/category/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this category?')" th:text="#{delete.button}">Delete</a>
             </td>
         </tr>
         </tbody>
