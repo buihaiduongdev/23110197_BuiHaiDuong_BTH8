@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login(Authentication authentication) {
-        // Nếu người dùng đã đăng nhập thì chuyển hướng về trang chủ
-        if (authentication != null && authentication.isAuthenticated()) {
-            return "redirect:/home";
-        }
-        // Nếu chưa đăng nhập thì hiển thị trang login
-        return "login";
-    }
+	@GetMapping("/login")
+	public String login(Authentication authentication) {
+		if (authentication != null && authentication.isAuthenticated()) {
+			return "redirect:/home";
+		}
+		// Nếu chưa đăng nhập thì hiển thị trang login
+		return "login";
+	}
 }
