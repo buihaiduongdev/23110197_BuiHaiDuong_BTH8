@@ -3,6 +3,8 @@ package com.example.bth07.controller;
 import com.example.bth07.entity.Category;
 import com.example.bth07.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +16,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public String listCategories(Model model) {
+    public String listCategories(Model model, Authentication authentication) {
         model.addAttribute("categories", categoryService.findAll());
+        if (authentication != null && authentication.isAuthenticated()) {
+            boolean isAdminOrManager = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN") || role.equals("MANAGER"));
+            model.addAttribute("isAdminOrManager", isAdminOrManager);
+        }
         return "category/list";
     }
 
