@@ -9,7 +9,7 @@
 <section layout:fragment="content">
     <h1 th:text="#{category.edit.title}">Edit Category</h1>
 
-    <form th:action="@{/category/edit}" th:object="${category}" method="post" class="needs-validation" novalidate>
+    <form th:action="@{/category/edit}" th:object="${category}" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
@@ -21,6 +21,12 @@
         <div class="mb-3">
             <label for="description" class="form-label" th:text="#{category.description}">Description</label>
             <input type="text" id="description" th:field="*{description}" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label" th:text="#{category.image}">Image</label>
+            <input type="file" id="imageFile" name="imageFile" class="form-control"/>
+            <img th:if="${category.image != null}" th:src="@{/category/images/{filename}(filename=${category.image})}" alt="Category Image" width="100"/>
         </div>
 
         <div>

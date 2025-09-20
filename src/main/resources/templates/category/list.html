@@ -17,12 +17,18 @@
         <thead class="table-dark">
         <tr>
             <th th:text="#{category.name.label}">Name</th>
+            <th th:text="#{category.description}">Description</th>
+            <th th:text="#{category.image}">Image</th>
             <th th:if="${isAdminOrManager}" th:text="#{actions.label}">Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="category : ${categories}">
             <td th:text="${category.name}"></td>
+            <td th:text="${category.description}"></td>
+            <td>
+                <img th:if="${category.image != null}" th:src="@{/category/images/{filename}(filename=${category.image})}" alt="Category Image" width="100"/>
+            </td>
             <td th:if="${isAdminOrManager}">
                 <a th:href="@{/category/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm" th:text="#{edit.button}">Edit</a>
                 <a th:href="@{/category/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm"
