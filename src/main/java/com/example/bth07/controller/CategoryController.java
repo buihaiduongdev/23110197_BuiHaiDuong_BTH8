@@ -3,17 +3,26 @@ package com.example.bth07.controller;
 import com.example.bth07.entity.Category;
 import com.example.bth07.entity.User;
 import com.example.bth07.service.CategoryService;
+import com.example.bth07.service.FileStorageService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     private boolean isUserAuthorized(HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -49,9 +58,13 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public String addCategory(@ModelAttribute("category") Category category, HttpSession session) {
+    public String addCategory(@ModelAttribute("category") Category category, @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
         if (!isUserAuthorized(session)) {
             return "redirect:/login";
+        }
+        if (!imageFile.isEmpty()) {
+            String fileName = fileStorageService.storeFile(imageFile);
+            category.setImage(fileName);
         }
         categoryService.save(category);
         return "redirect:/category";
@@ -68,9 +81,13 @@ public class CategoryController {
     }
 
     @PostMapping("/edit")
-    public String editCategory(@ModelAttribute("category") Category category, HttpSession session) {
+    public String editCategory(@ModelAttribute("category") Category category, @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
         if (!isUserAuthorized(session)) {
             return "redirect:/login";
+        }
+        if (!imageFile.isEmpty()) {
+            String fileName = fileStorageService.storeFile(imageFile);
+            category.setImage(fileName);
         }
         categoryService.save(category);
         return "redirect:/category";
@@ -83,5 +100,13 @@ public class CategoryController {
         }
         categoryService.deleteById(id);
         return "redirect:/category";
+    }
+
+    @GetMapping("/images/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+        Resource file = fileStorageService.loadFileAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 }
