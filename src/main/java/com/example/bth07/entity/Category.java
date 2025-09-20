@@ -28,12 +28,16 @@ public class Category {
 
     private String image;
 
+    // This is the "one" side of the One-to-Many relationship with Product
+    // It will be serialized to JSON.
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("category-product")
     private List<Product> products;
 
+    // This is the "many" side of the Many-to-One relationship with User
+    // This side will be ignored during serialization to break the loop.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference("user-category")
     private User createdBy;
 }
