@@ -45,6 +45,7 @@ public class User {
 	private Role role;
 
 	@OneToMany(mappedBy = "createdBy")
+	@JsonManagedReference
 	private Set<Category> categories;
 
 	public enum Role {
