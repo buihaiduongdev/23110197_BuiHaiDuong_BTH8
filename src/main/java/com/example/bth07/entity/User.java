@@ -2,10 +2,13 @@ package com.example.bth07.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +31,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(unique = true)
 	private String username;
@@ -44,8 +47,8 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "createdBy")
-	@JsonManagedReference
+	@OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+	@JsonManagedReference("user-category")
 	private Set<Category> categories;
 
 	public enum Role {
