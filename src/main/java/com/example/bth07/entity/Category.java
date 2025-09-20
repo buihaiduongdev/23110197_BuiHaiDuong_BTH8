@@ -1,7 +1,7 @@
 package com.example.bth07.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,14 +28,10 @@ public class Category {
 
     private String image;
 
-    // This is the "one" side of the One-to-Many relationship with Product
-    // It will be serialized to JSON.
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("category-product")
+    @JsonIgnore
     private List<Product> products;
 
-    // This is the "many" side of the Many-to-One relationship with User
-    // This side will be ignored during serialization to break the loop.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference("user-category")
