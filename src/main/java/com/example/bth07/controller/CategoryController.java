@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 @RequestMapping("/category")
@@ -108,5 +107,15 @@ public class CategoryController {
         Resource file = fileStorageService.loadFileAsResource(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/search")
+    public String searchCategory(@RequestParam("keyword") String keyword, Model model, HttpSession session) {
+        if (!isUserAuthorized(session)) {
+            return "redirect:/login";
+        }
+        model.addAttribute("categories", categoryService.search(keyword));
+        addUserRolesToModel(session, model);
+        return "category/list";
     }
 }

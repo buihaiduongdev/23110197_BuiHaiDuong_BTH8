@@ -27,4 +27,8 @@ public class CategoryService {
     public void deleteById(Integer id) {
         categoryRepository.deleteById(id);
     }
+
+    public List<Category> search(String keyword) {
+        return categoryRepository.findByNameContainingIgnoreCase(keyword);
+    }
 }

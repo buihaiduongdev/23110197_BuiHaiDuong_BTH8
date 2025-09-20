@@ -9,9 +9,16 @@
 <section layout:fragment="content">
     <h1 th:text="#{category.list.title}">Category List</h1>
 
-    <div class="mb-3" th:if="${isAdminOrManager}">
-        <a th:href="@{/category/add}" class="btn btn-primary" th:text="#{category.add.button}">Add Category</a>
+    <div class="mb-3">
+        <a th:if="${isAdminOrManager}" th:href="@{/category/add}" class="btn btn-primary" th:text="#{category.add.button}">Add Category</a>
     </div>
+
+    <form th:action="@{/category/search}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" th:placeholder="#{search.placeholder}">
+            <button type="submit" class="btn btn-outline-secondary" th:text="#{button.search}">Search</button>
+        </div>
+    </form>
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
