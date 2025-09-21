@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/products")
@@ -75,12 +76,22 @@ public class ProductController {
                                 Model model) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.findAll());
+            product.setId(id);
             return "products/form";
         }
 
-        if (!imageFile.isEmpty()) {
-            String imageUrl = fileStorageService.storeFile(imageFile);
-            product.setImages(imageUrl);
+        Optional<Product> optionalProduct = productService.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product existingProduct = optionalProduct.get();
+
+            if (!imageFile.isEmpty()) {
+                String imageUrl = fileStorageService.storeFile(imageFile);
+                product.setImages(imageUrl);
+            } else {
+                product.setImages(existingProduct.getImages());
+            }
+        } else {
+             throw new IllegalArgumentException("Invalid product Id:" + id);
         }
 
         product.setId(id);
