@@ -17,11 +17,11 @@
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label" th:text="#{login.username}">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <input type="text" class="form-control" id="username" name="username" required text="admin">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label" th:text="#{login.password}">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" required text="123456">
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary" th:text="#{login.button}">Login</button>
