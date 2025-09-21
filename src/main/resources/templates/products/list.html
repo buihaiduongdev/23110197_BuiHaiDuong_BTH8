@@ -30,7 +30,7 @@
             <td th:text="${product.id}"></td>
             <td th:text="${product.productName}"></td>
             <td>
-                <img th:src="@{${product.images}}" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                <img th:if="${product.images}" th:src="@{'/uploads/' + ${product.images}}" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
             </td>
             <td th:text="${product.unitPrice}"></td>
             <td th:text="${product.quantity}"></td>

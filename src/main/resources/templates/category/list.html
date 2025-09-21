@@ -34,7 +34,7 @@
             <td th:text="${category.name}"></td>
             <td th:text="${category.description}"></td>
             <td>
-                <img th:if="${category.image != null}" th:src="@{/category/images/{filename}(filename=${category.image})}" alt="Category Image" width="100"/>
+                <img th:if="${category.image != null}" th:src="@{'/uploads/' + ${category.image}}" alt="Category Image" width="100"/>
             </td>
             <td th:if="${isAdminOrManager}">
                 <a th:href="@{/category/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm" th:text="#{edit.button}">Edit</a>
