@@ -38,7 +38,7 @@ public class Product {
 	private String images; // Can be a single filename or a list of filenames separated by comma
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     @JsonBackReference("category-product")
     private Category category;
