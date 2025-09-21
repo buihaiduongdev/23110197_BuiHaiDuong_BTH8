@@ -14,7 +14,8 @@
 
         <!-- Admin menu -->
         <div th:if="${session.currentUser.role.name() == 'admin'}">
-            <a th:href="@{/category}">Manage Categories</a>
+            <a th:href="@{/category}" style="margin-right: 15px;">Manage Categories</a>
+            <a th:href="@{/products}">Manage Products</a>
         </div>
 
         <!-- Manager/User -->

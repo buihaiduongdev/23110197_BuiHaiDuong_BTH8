@@ -2,8 +2,7 @@ package com.example.bth07.entity;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,7 +47,7 @@ public class User {
 	private Role role;
 
 	@OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
-	@JsonManagedReference("user-category")
+    @JsonIgnore
 	private Set<Category> categories;
 
 	public enum Role {
