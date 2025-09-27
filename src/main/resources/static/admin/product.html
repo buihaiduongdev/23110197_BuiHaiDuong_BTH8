@@ -20,7 +20,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h2>Product List</h2>
-            <button class="btn btn-primary" onclick="getAllProducts()">Refresh Products</button>
+            <button class="btn btn-primary" onclick="getAllProducts(true)">Refresh Products</button>
         </div>
         <div class="card-body">
             <div id="product-list" class="product-list"></div>
@@ -140,12 +140,14 @@
         }
     }
 
-    async function getAllProducts() {
+    async function getAllProducts(showResult = false) {
         try {
             const response = await fetch('/api/product');
             const products = await response.json(); 
 
-            displayResult(products, response.status);
+            if (showResult) {
+                displayResult(products, response.status);
+            }
 
             if (!response.ok) {
                 productListDiv.innerHTML = '<div class="alert alert-danger">Could not load products.</div>';
@@ -170,7 +172,9 @@
             productListDiv.innerHTML = tableHtml;
         } catch (error) {
             productListDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            displayResult({ error: error.message }, 'Error');
+            if (showResult) {
+                displayResult({ error: error.message }, 'Error');
+            }
         }
     }
 
@@ -232,6 +236,7 @@
         try {
             const response = await fetch(`/api/product/${id}`, { method: 'DELETE' });
             if (response.ok) {
+                // For DELETE, response might not have a body, so we display a custom message
                 displayResult({ message: `Product ${id} deleted` }, response.status);
                 await getAllProducts();
             } else {
@@ -245,7 +250,7 @@
 
     (async () => {
         await fetchCategories();
-        await getAllProducts();
+        await getAllProducts(true); // Show initial list in result display
     })();
 </script>
 

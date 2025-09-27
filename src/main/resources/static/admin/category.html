@@ -20,7 +20,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h2>Category List</h2>
-            <button class="btn btn-primary" onclick="getAllCategories()">Refresh Categories</button>
+            <button class="btn btn-primary" onclick="getAllCategories(true)">Refresh Categories</button>
         </div>
         <div class="card-body">
             <div id="category-list" class="category-list"></div>
@@ -108,12 +108,14 @@
         document.getElementById('updateDescription').value = description;
     }
 
-    async function getAllCategories() {
+    async function getAllCategories(showResult = false) {
         try {
             const response = await fetch('/api/category');
             const categories = await response.json();
             
-            displayResult(categories, response.status);
+            if (showResult) {
+                displayResult(categories, response.status);
+            }
 
             if (!response.ok) {
                 categoryListDiv.innerHTML = `<div class="alert alert-danger">Could not load categories.</div>`;
@@ -144,7 +146,9 @@
 
         } catch (error) {
             categoryListDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            displayResult({ error: error.message }, 'Error');
+            if (showResult) {
+                displayResult({ error: error.message }, 'Error');
+            }
         }
     }
 
@@ -250,7 +254,7 @@
     }
 
     // Initial load
-    getAllCategories();
+    getAllCategories(true);
 </script>
 
 </body>
