@@ -2,76 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Category API Test</title>
-    <style>
-        body { font-family: sans-serif; margin: 2em; }
-        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-        .container { max-width: 800px; margin: auto; }
-        .form-group { margin-bottom: 1em; }
-        label { display: block; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { padding: 10px 15px; cursor: pointer; }
-        pre { background-color: #f4f4f4; padding: 1em; border: 1px solid #ddd; }
-    </style>
+    <title>Category Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
-    <h1>Category API Test Page</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Category Management</h1>
 
     <!-- Get All Categories -->
-    <h2>Get All Categories</h2>
-    <button onclick="getAllCategories()">Get All</button>
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>Category List</h2>
+            <button class="btn btn-primary" onclick="getAllCategories()">Refresh Categories</button>
+        </div>
+        <div class="card-body">
+            <pre id="result-display">Category list will be shown here.</pre>
+        </div>
+    </div>
 
-    <!-- Create Category -->
-    <h2>Create Category</h2>
-    <div class="form-group">
-        <label for="createName">Name:</label>
-        <input type="text" id="createName" placeholder="Enter category name">
-    </div>
-     <div class="form-group">
-        <label for="createDescription">Description:</label>
-        <textarea id="createDescription" placeholder="Enter description"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="createImage">Image:</label>
-        <input type="file" id="createImage">
-    </div>
-    <button onclick="createCategory()">Create</button>
+    <!-- Create, Update, and Delete Forms -->
+    <div class="row">
+        <!-- Create Category Form -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Create Category</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="createName" class="form-label">Name:</label>
+                        <input type="text" class="form-control" id="createName" placeholder="Enter category name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="createDescription" class="form-label">Description:</label>
+                        <textarea class="form-control" id="createDescription" placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createImage" class="form-label">Image:</label>
+                        <input type="file" class="form-control" id="createImage">
+                    </div>
+                    <button class="btn btn-success" onclick="createCategory()">Create</button>
+                </div>
+            </div>
+        </div>
 
-    <!-- Update Category -->
-    <h2>Update Category</h2>
-    <div class="form-group">
-        <label for="updateId">Category ID to Update:</label>
-        <input type="number" id="updateId" placeholder="Enter category ID">
-    </div>
-    <div class="form-group">
-        <label for="updateName">New Name:</label>
-        <input type="text" id="updateName" placeholder="Enter new name">
-    </div>
-    <div class="form-group">
-        <label for="updateDescription">New Description:</label>
-        <textarea id="updateDescription" placeholder="Enter new description"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="updateImage">New Image:</label>
-        <input type="file" id="updateImage">
-    </div>
-    <button onclick="updateCategory()">Update</button>
+        <!-- Update Category Form -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Update Category</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="updateId" class="form-label">Category ID:</label>
+                        <input type="number" class="form-control" id="updateId" placeholder="Enter ID to update">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateName" class="form-label">New Name:</label>
+                        <input type="text" class="form-control" id="updateName" placeholder="Enter new name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateDescription" class="form-label">New Description:</label>
+                        <textarea class="form-control" id="updateDescription" placeholder="Enter new description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateImage" class="form-label">New Image:</label>
+                        <input type="file" class="form-control" id="updateImage">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateCategory()">Update</button>
+                </div>
+            </div>
+        </div>
 
-    <!-- Delete Category -->
-    <h2>Delete Category</h2>
-    <div class="form-group">
-        <label for="deleteId">Category ID to Delete:</label>
-        <input type="number" id="deleteId" placeholder="Enter category ID">
+        <!-- Delete Category Form -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Delete Category</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="deleteId" class="form-label">Category ID:</label>
+                        <input type="number" class="form-control" id="deleteId" placeholder="Enter ID to delete">
+                    </div>
+                    <button class="btn btn-danger" onclick="deleteCategory()">Delete</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <button onclick="deleteCategory()">Delete</button>
-
-    <!-- Result -->
-    <h2>Result</h2>
-    <pre id="result-display">API responses will be shown here.</pre>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const resultDisplay = document.getElementById('result-display');
 
@@ -79,7 +101,6 @@
         resultDisplay.textContent = `Status: ${status}\n\n${JSON.stringify(data, null, 2)}`;
     }
 
-    // Get All
     async function getAllCategories() {
         try {
             const response = await fetch('/api/category');
@@ -90,7 +111,6 @@
         }
     }
 
-    // Create
     async function createCategory() {
         const name = document.getElementById('createName').value;
         const description = document.getElementById('createDescription').value;
@@ -114,13 +134,12 @@
             });
             const data = await response.json();
             displayResult(data, response.status);
-            if(response.ok) getAllCategories(); // Refresh list
+            if(response.ok) getAllCategories();
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
     }
 
-    // Update
     async function updateCategory() {
         const id = document.getElementById('updateId').value;
         const name = document.getElementById('updateName').value;
@@ -145,13 +164,12 @@
             });
             const data = await response.json();
             displayResult(data, response.status);
-             if(response.ok) getAllCategories(); // Refresh list
+             if(response.ok) getAllCategories();
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
     }
 
-    // Delete
     async function deleteCategory() {
         const id = document.getElementById('deleteId').value;
         if (!id) {
@@ -167,20 +185,18 @@
             const response = await fetch(`/api/category/${id}`, {
                 method: 'DELETE'
             });
-            // For DELETE, response might not have a body, so we display a custom message
-            if (response.status === 204) { // No Content
+            if (response.status === 204) { 
                  displayResult({ message: `Category ${id} deleted successfully.` }, response.status);
             } else {
-                 const data = await response.json().catch(() => ({})); // Handle cases with no JSON body
+                 const data = await response.json().catch(() => ({}));
                  displayResult(data, response.status);
             }
-             if(response.ok) getAllCategories(); // Refresh list
+             if(response.ok) getAllCategories();
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
     }
 
-    // Initial load
     getAllCategories();
 </script>
 
