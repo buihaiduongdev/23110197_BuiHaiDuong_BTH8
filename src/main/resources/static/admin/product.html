@@ -125,7 +125,7 @@
             const response = await fetch('/api/category');
             if (!response.ok) return;
             const categories = await response.json();
-            
+
             createCategorySelect.innerHTML = '';
             updateCategorySelect.innerHTML = '';
 
@@ -143,13 +143,17 @@
     async function getAllProducts() {
         try {
             const response = await fetch('/api/product');
+            const products = await response.json(); 
+
+            displayResult(products, response.status);
+
             if (!response.ok) {
                 productListDiv.innerHTML = '<div class="alert alert-danger">Could not load products.</div>';
                 return;
             }
-            const products = await response.json();
+
             let tableHtml = '<table class="table table-striped table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Quantity</th><th>Category</th><th>Images</th><th>Actions</th></tr></thead><tbody>';
-            
+
             for (const product of products) {
                 tableHtml += `<tr>
                     <td>${product.id}</td>
@@ -161,20 +165,22 @@
                     <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
                 </tr>`;
             }
-            
+
             tableHtml += '</tbody></table>';
             productListDiv.innerHTML = tableHtml;
         } catch (error) {
             productListDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            displayResult({ error: error.message }, 'Error');
         }
     }
+
     async function createProduct() {
         const formData = new FormData();
         formData.append('productName', document.getElementById('createName').value);
         formData.append('unitPrice', document.getElementById('createPrice').value);
         formData.append('quantity', document.getElementById('createQuantity').value);
         formData.append('categoryId', document.getElementById('createCategory').value);
-        
+
         const files = document.getElementById('createImages').files;
         for (let i = 0; i < files.length; i++) {
             formData.append('images', files[i]);
@@ -184,7 +190,7 @@
             const response = await fetch('/api/product', { method: 'POST', body: formData });
             const data = await response.json();
             displayResult(data, response.status);
-            if(response.ok) getAllProducts();
+            if(response.ok) await getAllProducts();
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
@@ -212,7 +218,7 @@
             const response = await fetch(`/api/product/${id}`, { method: 'PUT', body: formData });
             const data = await response.json();
             displayResult(data, response.status);
-            if(response.ok) getAllProducts();
+            if(response.ok) await getAllProducts();
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
@@ -225,14 +231,22 @@
 
         try {
             const response = await fetch(`/api/product/${id}`, { method: 'DELETE' });
-            displayResult({ message: `Product ${id} deleted` }, response.status);
-            if(response.ok) getAllProducts();
+            if (response.ok) {
+                displayResult({ message: `Product ${id} deleted` }, response.status);
+                await getAllProducts();
+            } else {
+                const data = await response.json().catch(() => ({}));
+                displayResult(data, response.status);
+            }
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
     }
-    fetchCategories();
-    getAllProducts();
+
+    (async () => {
+        await fetchCategories();
+        await getAllProducts();
+    })();
 </script>
 
 </body>
