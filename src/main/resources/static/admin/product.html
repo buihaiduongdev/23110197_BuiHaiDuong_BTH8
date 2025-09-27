@@ -20,7 +20,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h2>Product List</h2>
-            <button class="btn btn-primary" onclick="getAllProducts(true)">Refresh Products</button>
+            <button class="btn btn-primary" onclick="getAllProducts()">Refresh Products</button>
         </div>
         <div class="card-body">
             <div id="product-list" class="product-list"></div>
@@ -140,14 +140,10 @@
         }
     }
 
-    async function getAllProducts(showResult = false) {
+    async function refreshProductTable() {
         try {
             const response = await fetch('/api/product');
-            const products = await response.json(); 
-
-            if (showResult) {
-                displayResult(products, response.status);
-            }
+            const products = await response.json();
 
             if (!response.ok) {
                 productListDiv.innerHTML = '<div class="alert alert-danger">Could not load products.</div>';
@@ -172,9 +168,17 @@
             productListDiv.innerHTML = tableHtml;
         } catch (error) {
             productListDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            if (showResult) {
-                displayResult({ error: error.message }, 'Error');
-            }
+        }
+    }
+
+    async function getAllProducts() {
+        try {
+            const response = await fetch('/api/product');
+            const products = await response.json();
+            displayResult(products, response.status); // Display the whole list in the result area
+            await refreshProductTable(); // Update the table
+        } catch (error) {
+            displayResult({ error: error.message }, 'Error');
         }
     }
 
@@ -193,8 +197,8 @@
         try {
             const response = await fetch('/api/product', { method: 'POST', body: formData });
             const data = await response.json();
-            displayResult(data, response.status);
-            if(response.ok) await getAllProducts();
+            displayResult(data, response.status); // Display specific response
+            if(response.ok) await refreshProductTable(); // Silently refresh table
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
@@ -221,8 +225,8 @@
         try {
             const response = await fetch(`/api/product/${id}`, { method: 'PUT', body: formData });
             const data = await response.json();
-            displayResult(data, response.status);
-            if(response.ok) await getAllProducts();
+            displayResult(data, response.status); // Display specific response
+            if(response.ok) await refreshProductTable(); // Silently refresh table
         } catch (error) {
             displayResult({ error: error.message }, 'Error');
         }
@@ -235,10 +239,9 @@
 
         try {
             const response = await fetch(`/api/product/${id}`, { method: 'DELETE' });
-            if (response.ok) {
-                // For DELETE, response might not have a body, so we display a custom message
-                displayResult({ message: `Product ${id} deleted` }, response.status);
-                await getAllProducts();
+            if (response.status === 200 || response.status === 204) {
+                displayResult({ message: `Product ${id} deleted` }, response.status); // Display specific response
+                await refreshProductTable(); // Silently refresh table
             } else {
                 const data = await response.json().catch(() => ({}));
                 displayResult(data, response.status);
@@ -250,7 +253,7 @@
 
     (async () => {
         await fetchCategories();
-        await getAllProducts(true); // Show initial list in result display
+        await getAllProducts();
     })();
 </script>
 

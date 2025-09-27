@@ -20,7 +20,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h2>Category List</h2>
-            <button class="btn btn-primary" onclick="getAllCategories(true)">Refresh Categories</button>
+            <button class="btn btn-primary" onclick="getAllCategories()">Refresh Categories</button>
         </div>
         <div class="card-body">
             <div id="category-list" class="category-list"></div>
@@ -108,15 +108,11 @@
         document.getElementById('updateDescription').value = description;
     }
 
-    async function getAllCategories(showResult = false) {
+    async function refreshCategoryTable() {
         try {
             const response = await fetch('/api/category');
             const categories = await response.json();
             
-            if (showResult) {
-                displayResult(categories, response.status);
-            }
-
             if (!response.ok) {
                 categoryListDiv.innerHTML = `<div class="alert alert-danger">Could not load categories.</div>`;
                 return;
@@ -125,7 +121,6 @@
             let tableHtml = '<table class="table table-striped table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Image</th><th>Actions</th></tr></thead><tbody>';
             
             for (const category of categories) {
-                // Escape single quotes in name and description for the onclick handler
                 const safeName = category.name.replace(/'/g, "\'");
                 const safeDescription = category.description.replace(/'/g, "\'");
 
@@ -146,9 +141,17 @@
 
         } catch (error) {
             categoryListDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            if (showResult) {
-                displayResult({ error: error.message }, 'Error');
-            }
+        }
+    }
+    
+    async function getAllCategories() {
+         try {
+            const response = await fetch('/api/category');
+            const categories = await response.json();
+            displayResult(categories, response.status);
+            await refreshCategoryTable();
+        } catch (error) {
+            displayResult({ error: error.message }, 'Error');
         }
     }
 
@@ -176,8 +179,7 @@
             const data = await response.json();
             displayResult(data, response.status);
             if(response.ok) {
-                await getAllCategories();
-                // Clear form
+                await refreshCategoryTable();
                 document.getElementById('createName').value = '';
                 document.getElementById('createDescription').value = '';
                 document.getElementById('createImage').value = '';
@@ -213,8 +215,7 @@
             const data = await response.json();
             displayResult(data, response.status);
              if(response.ok) {
-                await getAllCategories();
-                // Clear form
+                await refreshCategoryTable();
                 document.getElementById('updateId').value = '';
                 document.getElementById('updateName').value = '';
                 document.getElementById('updateDescription').value = '';
@@ -241,9 +242,8 @@
             });
             
             if (response.ok) {
-                 // The body might be empty on success, so we create a custom message
                  displayResult({ message: `Category ${id} deleted successfully.` }, response.status);
-                 await getAllCategories();
+                 await refreshCategoryTable();
             } else {
                  const data = await response.json().catch(() => ({ error: "Failed to process response." }));
                  displayResult(data, response.status);
@@ -254,7 +254,7 @@
     }
 
     // Initial load
-    getAllCategories(true);
+    getAllCategories();
 </script>
 
 </body>
